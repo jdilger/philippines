@@ -1,0 +1,41 @@
+{
+  "name": "projects/john-ee-282116/assets/forest_forest_30p_tcc/2011",
+  "tilesets": [
+    {
+      "id": "forest_data",
+      "sources": [
+        {
+          "uris": [
+            "gs://gee-upload/maps/forest/forest_30p_tcc/2011/forest_2011_data.tif"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "forest_prob",
+      "sources": [
+        {
+          "uris": [
+            "gs://gee-upload/maps/forest/forest_30p_tcc/2011/forest_2011_prob.tif"
+          ]
+        }
+      ]
+    }
+  ],
+  "bands": [
+    {
+      "id": "forest_data",
+      "tileset_id": "forest_data"
+    },
+    {
+      "id": "forest_prob",
+      "tileset_id": "forest_prob"
+    }
+  ],
+  "start_time": "2011-01-01T00:00:00Z",
+  "properties": {
+    "k": 1,
+    "v": 2,
+    "lol": 333
+  }
+}

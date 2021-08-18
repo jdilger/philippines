@@ -1,0 +1,69 @@
+{
+  "name": "projects/john-ee-282116/assets/change_forest_10p_tcc/2003",
+  "tilesets": [
+    {
+      "id": "forest_gain",
+      "sources": [
+        {
+          "uris": [
+            "gs://gee-upload/maps/change/forest_10p_tcc/2003/forest_2003_gain.tif"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "forest_gain_prob",
+      "sources": [
+        {
+          "uris": [
+            "gs://gee-upload/maps/change/forest_10p_tcc/2003/forest_2003_gain_prob.tif"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "forest_loss",
+      "sources": [
+        {
+          "uris": [
+            "gs://gee-upload/maps/change/forest_10p_tcc/2003/forest_2003_loss.tif"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "forest_loss_prob",
+      "sources": [
+        {
+          "uris": [
+            "gs://gee-upload/maps/change/forest_10p_tcc/2003/forest_2003_loss_prob.tif"
+          ]
+        }
+      ]
+    }
+  ],
+  "bands": [
+    {
+      "id": "forest_gain",
+      "tileset_id": "forest_gain"
+    },
+    {
+      "id": "forest_gain_prob",
+      "tileset_id": "forest_gain_prob"
+    },
+    {
+      "id": "forest_loss",
+      "tileset_id": "forest_loss"
+    },
+    {
+      "id": "forest_loss_prob",
+      "tileset_id": "forest_loss_prob"
+    }
+  ],
+  "start_time": "2003-01-01T00:00:00Z",
+  "properties": {
+    "k": 1,
+    "v": 2,
+    "lol": 333
+  }
+}
