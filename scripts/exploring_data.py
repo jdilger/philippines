@@ -46,9 +46,8 @@ def get_band_dict(bands:list,bucket:str)->dict:
 def get_metadata_dict(band_path:str,**kwags)->dict:
 
     parse_path = re.search(r"[\\/](\d{4})[\\/]",band_path)[1]
-    print(parse_path,'0000000000000000000')
     start_time = f"{datetime.strptime(parse_path,'%Y').isoformat()}Z"
-    print(start_time,'00000000000000000000')
+
     metadata_dict = dict(start_time=start_time)
     if kwags:
         metadata_dict['properties'] = kwags
@@ -134,13 +133,12 @@ print('base_ics',base_ics)
 # fix this later
 count = 0
 for i in base_ics:
-    for j in glob.glob(f"{i}/*/*")[:1]:
-        # note check how this works since years are not the smae between cols. add in some check for shorter dirs
+    for j in glob.glob(f"{i}/*/*"):
+
         band_paths = glob.glob(f"{j}/*.tif")
-        # print(band_paths[0],'888888888888888888')
         asset_name = make_asset_name(j,BASE_ASSET_PATH)
         band_dict = get_band_dict(band_paths,BUCKET)
-        metadata = get_metadata_dict(band_paths[0],k=1,v=2,lol=333)
+        metadata = get_metadata_dict(band_paths[0])
         manifest = make_manifest(asset_name,band_dict,metadata)
         save(manifest,"./scripts/manifests",f"manifest_{count}",test=False)
         count += 1
@@ -148,64 +146,3 @@ for i in base_ics:
 
 print('total imgs:',count)
 print(set(unique_ics))
-# # test run area
-# i = first_col_path = glob.glob(f"{base_ics[0]}/*")[0]
-# print('first_col_path',first_col_path)
-# list_year_imgs = glob.glob(f"{i}/*")
-# j = list_year_imgs[0]
-# band_paths = glob.glob(f"{j}/*.tif")
-
-
-# asset_name = make_asset_name(j,BASE_ASSET_PATH)
-# band_dict= get_band_dict(band_paths,BUCKET)
-# metadata = get_metadata_dict(band_paths[0],k=1,v=2,lol=333)
-# make_manifest(asset_name,band_dict,metadata)
-
-#     # The enclosing object for the asset.
-# asset = {
-#       'name': asset_name,
-#       'tilesets': [
-#         # build this per img , append to tilesets
-#         {
-#           'id':  bandname,
-#           'sources': sources_uri_band1
-#         }
-#         #######
-#       ],
-#       'bands': [
-#         # build this per img, append to tilesets
-#         {
-#           'id': bandname,
-#           'tileset_id':bandname
-#         },
-#         ###########
-
-#       ],
-#       'start_time':"" #"2020-04-01T00:00:00Z"
-#     }
-#     # The enclosing object for the asset.
-# asset = {
-#       'name': asset_name,
-#       'tilesets': [],
-#       'bands': [],
-#       'start_time':"" #"2020-04-01T00:00:00Z"
-#     }
-
-"""
-work plan!
-20201001/maps - only thing we need.py
-Change 2 image collections
-maps/change/forest_10p_tcc/img = year bands= gain, gain prob, loss, loss prob
-ic : change_forest_10p_tcc
-example img: 2000
-example img bands : forest_gain_prob, forest_gain, forest_loss_prob, forest_loss
-
-maps/change/forest_30p_tcc/img = year bands= gain, gain prob, loss, loss prob
-
-Forests 2 image collections
-maps/forest/forest_10p_tcc/img = year bands= data, prob, loss, loss prob
-maps/forest/forest_30p_tcc/img = year bands= data, prob, loss, loss prob
-
- folder\folder\imageCollection_type\imageCollection\year\bands
-20201001\maps\**\**\**\*.tif'
-"""
