@@ -7,7 +7,8 @@ from datetime import datetime
 from pprint import pprint
 
 
-BASE_ASSET_PATH = r"projects/earthengine-legacy/assets/projects/sig-ee/Philippines"
+BASE_ASSET_PATH = r"projects/earthengine-legacy/assets/" \
+    r"projects/sig-ee/Philippines"
 BUCKET = "gee-upload"
 unique_ics = []
 
@@ -163,7 +164,7 @@ for i in base_ics:
         band_dict = get_band_dict(band_paths, BUCKET)
         metadata = get_metadata_dict(band_paths[0])
         manifest = make_manifest(asset_name, band_dict, metadata)
-        save(manifest, "./scripts/manifests", f"manifest_{count}", test=False)
+        save(manifest, "./scripts/manifests", f"manifest_{count}", test=True)
         count += 1
 
 
