@@ -21,7 +21,9 @@ def remove_year_band_name(bandnamepath: str) -> str:
     return "_".join(tmp)
 
 
-def make_asset_name(j: str, base_asset_path: str, search_key: str = 'maps') -> str:
+def make_asset_name(j: str,
+                    base_asset_path: str,
+                    search_key: str = 'maps') -> str:
 
     regex = search_key + r"[\\/](\w{2,})[\\/](\w{2,})[\\/](\d{4})"
     groups = re.search(regex, j)
@@ -30,7 +32,9 @@ def make_asset_name(j: str, base_asset_path: str, search_key: str = 'maps') -> s
     return asset_name
 
 
-def make_source_ids(localpath: str, bucket: str, split_folder: str = 'maps') -> str:
+def make_source_ids(localpath: str,
+                    bucket: str,
+                    split_folder: str = 'maps') -> str:
 
     gcp_id = localpath.replace("\\", r"/").split(split_folder)[1]
 
@@ -117,14 +121,18 @@ def check_json_name(file_name: str) -> str:
 def upload(manifest: str = None):
 
     result = subprocess.run(
-        ["earthengine", "upload", "image", "--manifest", manifest], capture_output=True)
+        ["earthengine", "upload", "image", "--manifest", manifest],
+        capture_output=True)
     task_id = re.search(
         r"(Started upload task with ID:) ([\w{1:24}\d{1:24}]*)", str(result))
 
     return f"{task_id.groups()[1]}"
 
 
-def save(manifest: dict, location: str, file_name: str = None, test: bool = False) -> None:
+def save(manifest: dict,
+         location: str,
+         file_name: str = None,
+         test: bool = False) -> None:
     assert manifest is not None, "Manifest has not been created."
     import os
     print(os.getcwd())
