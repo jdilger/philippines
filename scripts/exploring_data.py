@@ -7,8 +7,7 @@ from datetime import datetime
 from pprint import pprint
 
 
-BASE_ASSET_PATH = r"projects/earthengine-legacy/assets/" \
-    r"projects/sig-ee/Philippines"
+BASE_ASSET_PATH = r"projects/earthengine-legacy/assets/" r"projects/sig-ee/Philippines"
 BUCKET = "gee-upload"
 unique_ics = []
 
@@ -22,9 +21,7 @@ def remove_year_band_name(bandnamepath: str) -> str:
     return "_".join(tmp)
 
 
-def make_asset_name(j: str,
-                    base_asset_path: str,
-                    search_key: str = 'maps') -> str:
+def make_asset_name(j: str, base_asset_path: str, search_key: str = "maps") -> str:
 
     regex = search_key + r"[\\/](\w{2,})[\\/](\w{2,})[\\/](\d{4})"
     groups = re.search(regex, j)
@@ -33,9 +30,7 @@ def make_asset_name(j: str,
     return asset_name
 
 
-def make_source_ids(localpath: str,
-                    bucket: str,
-                    split_folder: str = 'maps') -> str:
+def make_source_ids(localpath: str, bucket: str, split_folder: str = "maps") -> str:
 
     gcp_id = localpath.replace("\\", r"/").split(split_folder)[1]
 
@@ -45,8 +40,7 @@ def make_source_ids(localpath: str,
 def get_band_dict(bands: list, bucket: str) -> dict:
 
     bands_gcp_formatted = [make_source_ids(i, bucket) for i in bands]
-    band_names = list(
-        map(lambda i: remove_year_band_name(i), bands_gcp_formatted))
+    band_names = list(map(lambda i: remove_year_band_name(i), bands_gcp_formatted))
     band_dict = dict(zip(band_names, bands_gcp_formatted))
 
     return band_dict
@@ -59,7 +53,7 @@ def get_metadata_dict(band_path: str, **kwags) -> dict:
 
     metadata_dict = dict(start_time=start_time)
     if kwags:
-        metadata_dict['properties'] = kwags
+        metadata_dict["properties"] = kwags
     return metadata_dict
 
 
@@ -70,38 +64,38 @@ def add_manifest_element(asset: dict, func, **kwags) -> None:
 
 def make_tilesets(asset: dict, band_dict: dict) -> None:
 
-    band_dict = band_dict.get('band_dict')
+    band_dict = band_dict.get("band_dict")
 
     for k, v in band_dict.items():
-        asset['tilesets'].append({"id": k, "sources": [{"uris": [v]}]})
+        asset["tilesets"].append({"id": k, "sources": [{"uris": [v]}]})
 
 
 def make_bands(asset: dict, band_dict: dict) -> None:
 
-    band_dict = band_dict.get('band_dict')
+    band_dict = band_dict.get("band_dict")
     for k, v in band_dict.items():
-        asset['bands'].append({"id": k, "tileset_id": k})
+        asset["bands"].append({"id": k, "tileset_id": k})
 
 
 def make_metadata(asset: dict, metadata: dict) -> None:
 
-    metadata = metadata.get('metadata')
-    start_time = metadata.get('start_time', None)
-    properties = metadata.get('properties', None)
+    metadata = metadata.get("metadata")
+    start_time = metadata.get("start_time", None)
+    properties = metadata.get("properties", None)
 
     if start_time:
-        asset['start_time'] = start_time
+        asset["start_time"] = start_time
     if properties:
-        asset['properties'] = properties
+        asset["properties"] = properties
 
 
 def make_manifest(asset_name: str, band_dict: dict, metadata: dict) -> dict:
     # todo, grab start time from j path -its the last entry
     asset = {
-        'name': asset_name,
-        'tilesets': [],
-        'bands': [],
-        'start_time': "",
+        "name": asset_name,
+        "tilesets": [],
+        "bands": [],
+        "start_time": "",
     }
     add_manifest_element(asset, make_tilesets, band_dict=band_dict)
     add_manifest_element(asset, make_bands, band_dict=band_dict)
@@ -112,7 +106,7 @@ def make_manifest(asset_name: str, band_dict: dict, metadata: dict) -> dict:
 
 
 def check_json_name(file_name: str) -> str:
-    search = re.search('.json$', file_name)
+    search = re.search(".json$", file_name)
     if search is None:
         return f"{file_name}.json"
     else:
@@ -122,37 +116,39 @@ def check_json_name(file_name: str) -> str:
 def upload(manifest: str = None):
 
     result = subprocess.run(
-        ["earthengine", "upload", "image", "--manifest", manifest],
-        capture_output=True)
+        ["earthengine", "upload", "image", "--manifest", manifest], capture_output=True
+    )
     task_id = re.search(
-        r"(Started upload task with ID:) ([\w{1:24}\d{1:24}]*)", str(result))
+        r"(Started upload task with ID:) ([\w{1:24}\d{1:24}]*)", str(result)
+    )
 
     return f"{task_id.groups()[1]}"
 
 
-def save(manifest: dict,
-         location: str,
-         file_name: str = None,
-         test: bool = False) -> None:
+def save(
+    manifest: dict, location: str, file_name: str = None, test: bool = False
+) -> None:
+    """saves your manifest to a local location."""
     assert manifest is not None, "Manifest has not been created."
     import os
+
     print(os.getcwd())
     if file_name is None:
         file_name = "manifest.json"
     else:
         file_name = check_json_name(file_name)
 
-    full_path = f'{location}/{file_name}'
+    full_path = f"{location}/{file_name}"
 
-    with open(full_path, 'w') as f:
+    with open(full_path, "w") as f:
         json.dump(manifest, f, indent=2)
 
     if test is False:
         upload(full_path)
 
 
-base_ics = [i for i in glob.glob('data/20201001/maps/*')]
-print('base_ics', base_ics)
+base_ics = [i for i in glob.glob("data/20201001/maps/*")]
+print("base_ics", base_ics)
 # note, needs to be ran from C:\Users\johnj\Documents\SIG\43.phi atm
 # fix this later
 count = 0
@@ -168,5 +164,5 @@ for i in base_ics:
         count += 1
 
 
-print('total imgs:', count)
+print("total imgs:", count)
 print(set(unique_ics))
