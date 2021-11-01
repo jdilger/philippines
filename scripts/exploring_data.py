@@ -4,10 +4,12 @@ import re
 import json
 import subprocess
 from datetime import datetime
-from pprint import pprint
+from rich import print
 
 
-BASE_ASSET_PATH = r"projects/earthengine-legacy/assets/" r"projects/sig-ee/Philippines"
+BASE_ASSET_PATH = (
+    r"projects/earthengine-legacy/assets/" r"projects/sig-ee/Philippines/v2"
+)
 BUCKET = "gee-upload"
 unique_ics = []
 
@@ -100,7 +102,7 @@ def make_manifest(asset_name: str, band_dict: dict, metadata: dict) -> dict:
     add_manifest_element(asset, make_tilesets, band_dict=band_dict)
     add_manifest_element(asset, make_bands, band_dict=band_dict)
     add_manifest_element(asset, make_metadata, metadata=metadata)
-    pprint(asset)
+    print(asset)
 
     return asset
 
@@ -126,16 +128,14 @@ def upload(manifest: str = None):
 
 
 def save(
-    manifest: dict, location: str, file_name: str = None, test: bool = False
+    manifest: dict, location: str, file_name: str = "manifest.json", test: bool = False
 ) -> None:
     """saves your manifest to a local location."""
     assert manifest is not None, "Manifest has not been created."
     import os
 
     print(os.getcwd())
-    if file_name is None:
-        file_name = "manifest.json"
-    else:
+    if file_name is not "manifest.json":
         file_name = check_json_name(file_name)
 
     full_path = f"{location}/{file_name}"
@@ -147,7 +147,7 @@ def save(
         upload(full_path)
 
 
-base_ics = [i for i in glob.glob("data/20201001/maps/*")]
+base_ics = [i for i in glob.glob("data/20211101/maps/*")]
 print("base_ics", base_ics)
 # note, needs to be ran from C:\Users\johnj\Documents\SIG\43.phi atm
 # fix this later
@@ -156,6 +156,7 @@ for i in base_ics:
     for j in glob.glob(f"{i}/*/*"):
 
         band_paths = glob.glob(f"{j}/*.tif")
+        print(band_paths)
         asset_name = make_asset_name(j, BASE_ASSET_PATH)
         band_dict = get_band_dict(band_paths, BUCKET)
         metadata = get_metadata_dict(band_paths[0])
